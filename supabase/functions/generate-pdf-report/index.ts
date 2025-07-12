@@ -398,17 +398,23 @@ function generateHTMLReport(data: AssessmentData): string {
             <div class="gauge-container">
                 <svg class="gauge-svg" viewBox="0 0 200 200">
                     <!-- Background arc (270 degrees, 3/4 circle) -->
-                    <path d="M 35.86 164.14 A 75 75 0 1 1 164.14 164.14" 
-                          fill="none" 
-                          stroke="#e5e7eb" 
-                          stroke-width="15" 
-                          stroke-linecap="round"/>
+                    <circle cx="100" cy="100" r="75" 
+                            fill="none" 
+                            stroke="#e5e7eb" 
+                            stroke-width="15" 
+                            stroke-dasharray="353" 
+                            stroke-dashoffset="88.25" 
+                            transform="rotate(-135 100 100)"
+                            stroke-linecap="round"/>
                     <!-- Filled arc based on exact percentage -->
-                    <path d="M 35.86 164.14 A 75 75 0 ${(overallPercentage || 0) > 50 ? 1 : 0} 1 ${100 + 75 * Math.cos(2.356 - (overallPercentage || 0) / 100 * 4.712)} ${100 + 75 * Math.sin(2.356 - (overallPercentage || 0) / 100 * 4.712)}" 
-                          fill="none" 
-                          stroke="${readinessLevel.color}" 
-                          stroke-width="15" 
-                          stroke-linecap="round"/>
+                    <circle cx="100" cy="100" r="75" 
+                            fill="none" 
+                            stroke="${readinessLevel.color}" 
+                            stroke-width="15" 
+                            stroke-dasharray="${(overallPercentage || 0) * 3.53} 353" 
+                            stroke-dashoffset="88.25" 
+                            transform="rotate(-135 100 100)"
+                            stroke-linecap="round"/>
                 </svg>
                 <div class="gauge-score">${overallPercentage || 0}%</div>
                 <div class="gauge-level">${readinessLevel.level}</div>
