@@ -1,6 +1,4 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-// @deno-types="https://deno.land/x/puppeteer@16.2.0/vendor/puppeteer-core/puppeteer/types.d.ts"
-import puppeteer from "https://deno.land/x/puppeteer@16.2.0/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -502,25 +500,39 @@ serve(async (req) => {
 
   try {
     const assessmentData: AssessmentData = await req.json();
+    console.log('Generating report...');
 
     // Generate HTML report with charts and logo
     const htmlContent = generateHTMLReport(assessmentData);
     
-    return new Response(htmlContent, {
+    // Convert HTML to base64 for PDF-like treatment
+    const base64Html = btoa(unescape(encodeURIComponent(htmlContent)));
+    
+    console.log('Report generated successfully');
+    
+    return new Response(JSON.stringify({
+      success: true,
+      reportHtml: htmlContent,
+      pdfData: base64Html, // HTML as base64 for email attachment
+      message: "Report generated successfully"
+    }), {
+      status: 200,
       headers: {
+        "Content-Type": "application/json",
         ...corsHeaders,
-        'Content-Type': 'text/html',
-        'Content-Disposition': 'inline; filename="iso9001-assessment-report.html"'
       },
     });
 
   } catch (error) {
-    console.error('Error generating PDF report:', error);
+    console.error('Error generating report:', error);
     return new Response(
-      JSON.stringify({ error: 'Failed to generate PDF report' }),
+      JSON.stringify({ 
+        success: false,
+        error: error.message || 'Failed to generate report' 
+      }),
       {
         status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json", ...corsHeaders },
       }
     );
   }
