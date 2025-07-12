@@ -441,10 +441,7 @@ function generateHTMLReport(data: AssessmentData): string {
                         </div>
                         <div class="score-text">
                             <span>Score: ${result.score}/${result.maxScore}</span>
-                            <span>${percentage}%</span>
-                        </div>
-                        <div class="score-text">
-                            <span>Questions Completed: ${result.completedQuestions}/${result.totalQuestions}</span>
+                            <span>${result.completedQuestions}/${result.totalQuestions} questions</span>
                         </div>
                     </div>
                 `;
