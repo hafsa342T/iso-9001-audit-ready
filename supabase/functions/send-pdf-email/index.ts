@@ -63,15 +63,18 @@ const handler = async (req: Request): Promise<Response> => {
     // Prepare attachment based on available data
     const attachments = [];
     if (pdfData) {
-      attachments.push({
-        filename: 'ISO9001-Assessment-Report.pdf',
-        content: pdfData,
-        type: 'application/pdf',
-      });
-    } else if (reportHtml) {
+      // If we have PDF data, send as HTML attachment since our "PDF" is actually HTML
       attachments.push({
         filename: 'ISO9001-Assessment-Report.html',
-        content: Buffer.from(reportHtml).toString('base64'),
+        content: pdfData,
+        type: 'text/html',
+      });
+    } else if (reportHtml) {
+      // Convert HTML to base64 for attachment
+      const base64Html = Buffer.from(reportHtml).toString('base64');
+      attachments.push({
+        filename: 'ISO9001-Assessment-Report.html',
+        content: base64Html,
         type: 'text/html',
       });
     }
@@ -86,7 +89,7 @@ const handler = async (req: Request): Promise<Response> => {
         <h2>Your ISO 9001 Assessment Report is Ready!</h2>
         <p>Dear ${clientName},</p>
         <p>Thank you for completing the ISO 9001 readiness assessment. Your overall readiness score is <strong>${overallScore}%</strong>.</p>
-        <p>Please find your detailed assessment report attached${pdfData ? ' as a PDF' : ''}.</p>
+        <p>Please find your detailed assessment report attached as an HTML file. You can open it in any web browser and print it to PDF if needed.</p>
         <br>
         <p>Best regards,<br>QSE Academy Team</p>
       `,
