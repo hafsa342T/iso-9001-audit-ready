@@ -27,8 +27,14 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log("Sending email to:", clientEmail, "with copy to:", copyEmail);
 
-    const emailSubject = `Your ISO 9001 Assessment Report - ${overallScore}% Ready`;
+    const emailSubject = `Your ISO 9001 Assessment Report - ${overallScore}% Readiness`;
     
+    console.log("Preparing to send email:", {
+      to: clientEmail,
+      cc: copyEmail,
+      subject: emailSubject
+    });
+
     const emailResponse = await resend.emails.send({
       from: "QSE Academy <noreply@qse-academy.com>",
       to: [clientEmail],
@@ -45,6 +51,7 @@ const handler = async (req: Request): Promise<Response> => {
         <body style="font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 20px; background-color: #f4f4f4;">
           <div style="max-width: 600px; margin: 0 auto; background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
             <div style="text-align: center; margin-bottom: 30px;">
+              <img src="https://wespmcyzcpyammqtjqqv.supabase.co/storage/v1/object/public/reports/qse-academy-logo.png" alt="QSE Academy Logo" style="width: 200px; height: auto; margin-bottom: 20px;">
               <h1 style="color: #2563eb; margin: 0;">ISO 9001 Assessment Report</h1>
               <p style="color: #666; font-size: 16px; margin: 10px 0 0 0;">QSE Academy</p>
             </div>
@@ -52,7 +59,7 @@ const handler = async (req: Request): Promise<Response> => {
             <div style="margin-bottom: 30px;">
               <h2 style="color: #333;">Dear ${clientName},</h2>
               <p style="color: #666; font-size: 16px;">
-                Thank you for completing your ISO 9001 readiness assessment. Your detailed report is attached below.
+                Thank you for completing your ISO 9001 readiness assessment. Your detailed report is included below.
               </p>
               <p style="color: #666; font-size: 16px;">
                 <strong>Overall Readiness Score: ${overallScore}%</strong>
@@ -62,7 +69,7 @@ const handler = async (req: Request): Promise<Response> => {
             <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
               <h3 style="color: #2563eb; margin-top: 0;">What's Next?</h3>
               <ul style="color: #666; padding-left: 20px;">
-                <li>Review your detailed assessment results</li>
+                <li>Review your detailed assessment results below</li>
                 <li>Focus on areas that need improvement</li>
                 <li>Consider professional ISO 9001 consultation</li>
                 <li>Take steps to implement quality management systems</li>
@@ -73,7 +80,7 @@ const handler = async (req: Request): Promise<Response> => {
               <p style="color: #666; font-size: 14px;">
                 Need help implementing ISO 9001? Our experts are here to guide you through the certification process.
               </p>
-              <a href="mailto:contact@qse-academy.com" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: bold;">
+              <a href="mailto:support@qse-academy.com" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: bold;">
                 Contact Our Experts
               </a>
             </div>
