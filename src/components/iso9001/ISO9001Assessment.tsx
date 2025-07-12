@@ -275,13 +275,8 @@ export const ISO9001Assessment = () => {
         await saveAnswerToDatabase(answer);
       }
       
-      // Simulate report generation
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      toast({
-        title: "Report Generated!",
-        description: "Your ISO 9001 readiness report has been generated and saved.",
-      });
+      // Generate and email the report
+      await handleDownloadAndEmailPDF(email, firstName || 'User');
       
       setViewMode('results');
     } catch (error) {
@@ -293,6 +288,85 @@ export const ISO9001Assessment = () => {
       });
     } finally {
       setIsGeneratingReport(false);
+    }
+  };
+
+  const handleDownloadAndEmailPDF = async (clientEmail: string, clientName: string) => {
+    try {
+      setIsLoading(true);
+      
+      const allResults = getAllResults();
+      const overallScore = allResults.reduce((sum, result) => sum + result.score, 0);
+      const overallMaxScore = allResults.reduce((sum, result) => sum + result.maxScore, 0);
+      const overallPercentage = overallMaxScore > 0 ? Math.round((overallScore / overallMaxScore) * 100) : 0;
+
+      // Prepare data for PDF generation
+      const assessmentData = {
+        userInfo: { ...userInfo, email: clientEmail, firstName: clientName },
+        results: allResults.map(result => {
+          const chapter = iso9001Chapters.find(c => c.id === result.chapterId);
+          return {
+            ...result,
+            chapterTitle: chapter?.title || `Chapter ${result.chapterId}`
+          };
+        }),
+        overallScore,
+        overallPercentage
+      };
+
+      console.log('Generating report and sending email...');
+
+      // Generate the HTML report
+      const reportResponse = await supabase.functions.invoke('generate-pdf-report', {
+        body: assessmentData
+      });
+
+      if (reportResponse.error) {
+        throw new Error(reportResponse.error.message);
+      }
+
+      // Send email with the report
+      const emailResponse = await supabase.functions.invoke('send-pdf-email', {
+        body: {
+          clientEmail,
+          clientName,
+          copyEmail: 'your-email@qse-academy.com', // Replace with your email
+          reportHtml: reportResponse.data,
+          overallScore: overallPercentage
+        }
+      });
+
+      if (emailResponse.error) {
+        throw new Error(emailResponse.error.message);
+      }
+
+      // Also provide download option
+      if (reportResponse.data) {
+        const blob = new Blob([reportResponse.data], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `ISO9001-Assessment-Report-${clientName}-${new Date().toISOString().split('T')[0]}.html`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      }
+
+      toast({
+        title: "Report Sent!",
+        description: `Your ISO 9001 assessment report has been emailed to ${clientEmail} with a copy sent to your email.`,
+      });
+
+    } catch (error) {
+      console.error('Error generating and sending report:', error);
+      toast({
+        title: "Send Failed",
+        description: "There was an error generating and sending your report. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
