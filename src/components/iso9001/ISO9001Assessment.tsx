@@ -251,17 +251,24 @@ export const ISO9001Assessment = () => {
     setIsGeneratingReport(true);
     
     try {
+      // Calculate overall progress
+      const allResults = getAllResults();
+      const calculatedOverallProgress = allResults.length > 0 
+        ? Math.round(allResults.reduce((sum, result) => sum + result.percentage, 0) / allResults.length)
+        : 0;
+
       // Create or update assessment record
       let currentAssessmentId = assessmentId;
       
       if (!currentAssessmentId) {
+        console.log('Creating new assessment...');
         const { data, error } = await supabase
           .from('assessments')
           .insert({
             email,
             first_name: firstName,
             company,
-            overall_progress: overallProgress,
+            overall_progress: calculatedOverallProgress,
             status: 'completed'
           })
           .select()
@@ -270,7 +277,9 @@ export const ISO9001Assessment = () => {
         if (error) throw error;
         currentAssessmentId = data.id;
         setAssessmentId(currentAssessmentId);
+        console.log('Assessment created:', currentAssessmentId);
       } else {
+        console.log('Updating existing assessment:', currentAssessmentId);
         // Update existing assessment
         const { error } = await supabase
           .from('assessments')
@@ -278,23 +287,30 @@ export const ISO9001Assessment = () => {
             email,
             first_name: firstName,
             company,
-            overall_progress: overallProgress,
+            overall_progress: calculatedOverallProgress,
             status: 'completed'
           })
           .eq('id', currentAssessmentId);
 
         if (error) throw error;
+        console.log('Assessment updated successfully');
       }
 
       // Store user info
       setUserInfo({ email, firstName, company });
       
       // Save all answers to database
-      for (const answer of Object.values(answers)) {
+      console.log('Saving answers to database...');
+      const answerValues = Object.values(answers);
+      console.log('Number of answers to save:', answerValues.length);
+      
+      for (const answer of answerValues) {
         await saveAnswerToDatabase(answer);
       }
+      console.log('All answers saved successfully');
       
       // Generate and email the report
+      console.log('Generating and emailing report...');
       await handleDownloadAndEmailPDF(email, firstName || 'User');
       
       setViewMode('results');
@@ -302,7 +318,7 @@ export const ISO9001Assessment = () => {
       console.error('Error saving assessment:', error);
       toast({
         title: "Error",
-        description: "Failed to save your assessment. Please try again.",
+        description: `Failed to save your assessment: ${error.message || 'Unknown error'}. Please try again.`,
         variant: "destructive"
       });
     } finally {
