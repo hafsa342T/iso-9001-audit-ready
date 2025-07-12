@@ -210,13 +210,13 @@ function generateHTMLReport(data: AssessmentData): string {
             .gauge-container {
                 position: relative;
                 width: 200px;
-                height: 120px;
+                height: 200px;
                 margin: 0 auto 20px;
             }
             
             .gauge-svg {
                 width: 200px;
-                height: 120px;
+                height: 200px;
             }
             
             .gauge-score {
@@ -227,6 +227,16 @@ function generateHTMLReport(data: AssessmentData): string {
                 font-size: 2rem;
                 font-weight: bold;
                 color: ${readinessLevel.color};
+                z-index: 10;
+            }
+            
+            .gauge-level {
+                position: absolute;
+                top: 60%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 0.9rem;
+                color: #6b7280;
                 z-index: 10;
             }
             
@@ -386,23 +396,23 @@ function generateHTMLReport(data: AssessmentData): string {
         <div class="readiness-gauge">
             <h2>Overall Readiness Score</h2>
             <div class="gauge-container">
-                <svg class="gauge-svg" viewBox="0 0 200 120">
-                    <!-- Background arc (semicircle) -->
-                    <path d="M 30 90 A 70 70 0 0 1 170 90" 
+                <svg class="gauge-svg" viewBox="0 0 200 200">
+                    <!-- Background arc (270 degrees, 3/4 circle) -->
+                    <path d="M 35.86 164.14 A 75 75 0 1 1 164.14 164.14" 
                           fill="none" 
                           stroke="#e5e7eb" 
-                          stroke-width="12" 
+                          stroke-width="15" 
                           stroke-linecap="round"/>
                     <!-- Filled arc based on exact percentage -->
-                    <path d="M 30 90 A 70 70 0 ${(overallPercentage || 0) > 50 ? 1 : 0} 1 ${30 + 140 * Math.cos(Math.PI - (overallPercentage || 0) / 100 * Math.PI)} ${90 - 70 * Math.sin((overallPercentage || 0) / 100 * Math.PI)}" 
+                    <path d="M 35.86 164.14 A 75 75 0 ${(overallPercentage || 0) > 50 ? 1 : 0} 1 ${100 + 75 * Math.cos(2.356 - (overallPercentage || 0) / 100 * 4.712)} ${100 + 75 * Math.sin(2.356 - (overallPercentage || 0) / 100 * 4.712)}" 
                           fill="none" 
                           stroke="${readinessLevel.color}" 
-                          stroke-width="12" 
+                          stroke-width="15" 
                           stroke-linecap="round"/>
                 </svg>
                 <div class="gauge-score">${overallPercentage || 0}%</div>
+                <div class="gauge-level">${readinessLevel.level}</div>
             </div>
-            <div class="readiness-level">${readinessLevel.level}</div>
             <div class="readiness-description">${readinessLevel.description}</div>
         </div>
 
