@@ -30,27 +30,25 @@ const handler = async (req: Request): Promise<Response> => {
 
   try {
     console.log('Processing email request...');
-    const { clientEmail, clientName, copyEmail, reportHtml, pdfData, overallScore }: EmailRequest = await req.json();
+    const { clientEmail, clientName, copyEmail, reportHtml, overallScore }: EmailRequest = await req.json();
 
     console.log("Email request details:", {
       to: clientEmail,
       cc: copyEmail,
       clientName,
       overallScore,
-      hasPdfData: !!pdfData,
-      hasHtmlData: !!reportHtml
+      hasReportHtml: !!reportHtml
     });
 
     const resendApiKey = Deno.env.get("RESEND_API_KEY");
     
     if (!resendApiKey) {
-      console.log("Resend API key not configured - returning mock response");
+      console.log("Resend API key not configured");
       return new Response(JSON.stringify({
-        success: true,
-        messageId: `mock_${Date.now()}`,
-        message: "Email would be sent - configure RESEND_API_KEY in Supabase secrets to enable actual sending"
+        success: false,
+        error: "Email service not configured"
       }), {
-        status: 200,
+        status: 500,
         headers: {
           "Content-Type": "application/json",
           ...corsHeaders,
@@ -60,20 +58,18 @@ const handler = async (req: Request): Promise<Response> => {
 
     const resend = new Resend(resendApiKey);
 
-    // Prepare attachment - use HTML content and convert to base64
-    const attachments = [];
-    const htmlContent = reportHtml || "No report content available";
-    
-    // Convert HTML string to base64 for email attachment
-    const base64Html = Buffer.from(htmlContent, 'utf8').toString('base64');
-    
-    attachments.push({
-      filename: 'ISO9001-Assessment-Report.html',
-      content: base64Html,
-      type: 'text/html',
-    });
+    if (!reportHtml) {
+      throw new Error("No report content provided");
+    }
 
-    // Send the actual email with attachment
+    // Convert HTML to base64 for attachment
+    const encoder = new TextEncoder();
+    const htmlBytes = encoder.encode(reportHtml);
+    const base64Html = btoa(String.fromCharCode(...htmlBytes));
+
+    console.log("Sending email with HTML attachment...");
+
+    // Send the actual email with HTML attachment
     const emailResponse = await resend.emails.send({
       from: "QSE Academy <noreply@qse-academy.com>",
       to: [clientEmail],
@@ -87,7 +83,12 @@ const handler = async (req: Request): Promise<Response> => {
         <br>
         <p>Best regards,<br>QSE Academy Team</p>
       `,
-      attachments,
+      attachments: [
+        {
+          filename: 'ISO9001-Assessment-Report.html',
+          content: base64Html,
+        },
+      ],
     });
 
     console.log("Email sent successfully:", emailResponse);
