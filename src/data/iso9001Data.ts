@@ -313,7 +313,7 @@ export interface AssessmentResult {
 export const getScoreForAnswer = (value: AnswerValue, weight: number): number => {
   switch (value) {
     case 'yes': return weight;
-    case 'partial': return weight * 0.5;
+    case 'partial': return Math.round(weight * 0.5);
     case 'no': return 0;
     case 'na': return weight; // N/A questions are not counted against the score
     default: return 0;
