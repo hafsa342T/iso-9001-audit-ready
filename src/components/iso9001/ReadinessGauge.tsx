@@ -21,30 +21,32 @@ export const ReadinessGauge: React.FC<ReadinessGaugeProps> = ({ percentage }) =>
   const colors = [getColor(percentage), "hsl(var(--muted))"];
 
   return (
-    <div className="relative w-48 h-48">
-      <ResponsiveContainer width="100%" height="100%">
-        <PieChart>
-          <Pie
-            data={data}
-            cx="50%"
-            cy="50%"
-            startAngle={90}
-            endAngle={-270}
-            innerRadius={60}
-            outerRadius={80}
-            dataKey="value"
-            stroke="none"
-          >
-            {data.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={colors[index]} />
-            ))}
-          </Pie>
-        </PieChart>
-      </ResponsiveContainer>
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-3xl font-bold text-primary">{percentage}%</div>
-          <div className="text-sm text-muted-foreground">Ready</div>
+    <div className="flex flex-col items-center justify-center w-full max-w-sm mx-auto">
+      <div className="relative w-48 h-48 flex items-center justify-center">
+        <ResponsiveContainer width="100%" height="100%">
+          <PieChart>
+            <Pie
+              data={data}
+              cx="50%"
+              cy="50%"
+              startAngle={90}
+              endAngle={-270}
+              innerRadius={60}
+              outerRadius={80}
+              dataKey="value"
+              stroke="none"
+            >
+              {data.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={colors[index]} />
+              ))}
+            </Pie>
+          </PieChart>
+        </ResponsiveContainer>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-center">
+            <div className="text-3xl font-bold text-primary">{percentage}%</div>
+            <div className="text-sm text-muted-foreground">Ready</div>
+          </div>
         </div>
       </div>
     </div>
