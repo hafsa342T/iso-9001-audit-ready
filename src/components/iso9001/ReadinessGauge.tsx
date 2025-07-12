@@ -21,17 +21,17 @@ export const ReadinessGauge: React.FC<ReadinessGaugeProps> = ({ percentage }) =>
   const colors = [getColor(percentage), "hsl(var(--muted))"];
 
   return (
-    <div className="relative w-56 h-56 mx-auto">
+    <div className="relative w-64 h-64 mx-auto p-4">
       <ResponsiveContainer width="100%" height="100%">
-        <PieChart>
+        <PieChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
           <Pie
             data={data}
             cx="50%"
             cy="50%"
             startAngle={90}
             endAngle={-270}
-            innerRadius={70}
-            outerRadius={90}
+            innerRadius={60}
+            outerRadius={80}
             dataKey="value"
             stroke="none"
           >
@@ -41,7 +41,7 @@ export const ReadinessGauge: React.FC<ReadinessGaugeProps> = ({ percentage }) =>
           </Pie>
         </PieChart>
       </ResponsiveContainer>
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+      <div className="absolute inset-4 flex items-center justify-center pointer-events-none">
         <div className="text-center">
           <div className="text-4xl font-bold text-primary">{percentage}%</div>
           <div className="text-sm text-muted-foreground">Ready</div>
