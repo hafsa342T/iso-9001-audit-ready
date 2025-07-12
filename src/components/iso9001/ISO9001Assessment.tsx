@@ -76,7 +76,7 @@ export const ISO9001Assessment = () => {
     }
   };
 
-  const startNewAssessment = async () => {
+  const startNewAssessment = async (): Promise<string | null> => {
     try {
       const { data, error } = await supabase
         .from('assessments')
@@ -90,8 +90,15 @@ export const ISO9001Assessment = () => {
 
       if (error) throw error;
       setAssessmentId(data.id);
+      return data.id;
     } catch (error) {
       console.error('Error creating assessment:', error);
+      toast({
+        title: "Error",
+        description: "Failed to create assessment. Please refresh the page.",
+        variant: "destructive"
+      });
+      return null;
     }
   };
 
@@ -108,9 +115,21 @@ export const ISO9001Assessment = () => {
       [answer.questionId]: answer
     }));
 
+    // Ensure we have an assessment ID before saving
+    let currentAssessmentId = assessmentId;
+    if (!currentAssessmentId) {
+      currentAssessmentId = await startNewAssessment();
+    }
+
     // Save to database if we have an assessment ID
-    if (assessmentId) {
+    if (currentAssessmentId) {
       await saveAnswerToDatabase(answer);
+    } else {
+      toast({
+        title: "Error",
+        description: "Failed to create assessment. Please refresh the page and try again.",
+        variant: "destructive"
+      });
     }
   };
 
