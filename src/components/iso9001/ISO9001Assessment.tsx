@@ -330,7 +330,7 @@ export const ISO9001Assessment = () => {
         body: {
           clientEmail,
           clientName,
-          copyEmail: 'your-email@qse-academy.com', // Replace with your email
+          copyEmail: 'support@qse-academy.com',
           reportHtml: reportResponse.data,
           overallScore: overallPercentage
         }
