@@ -60,24 +60,18 @@ const handler = async (req: Request): Promise<Response> => {
 
     const resend = new Resend(resendApiKey);
 
-    // Prepare attachment based on available data
+    // Prepare attachment - use HTML content and convert to base64
     const attachments = [];
-    if (pdfData) {
-      // If we have PDF data, send as HTML attachment since our "PDF" is actually HTML
-      attachments.push({
-        filename: 'ISO9001-Assessment-Report.html',
-        content: pdfData,
-        type: 'text/html',
-      });
-    } else if (reportHtml) {
-      // Convert HTML to base64 for attachment
-      const base64Html = Buffer.from(reportHtml).toString('base64');
-      attachments.push({
-        filename: 'ISO9001-Assessment-Report.html',
-        content: base64Html,
-        type: 'text/html',
-      });
-    }
+    const htmlContent = reportHtml || "No report content available";
+    
+    // Convert HTML string to base64 for email attachment
+    const base64Html = Buffer.from(htmlContent, 'utf8').toString('base64');
+    
+    attachments.push({
+      filename: 'ISO9001-Assessment-Report.html',
+      content: base64Html,
+      type: 'text/html',
+    });
 
     // Send the actual email with attachment
     const emailResponse = await resend.emails.send({

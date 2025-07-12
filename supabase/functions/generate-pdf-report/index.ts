@@ -505,15 +505,11 @@ serve(async (req) => {
     // Generate HTML report with charts and logo
     const htmlContent = generateHTMLReport(assessmentData);
     
-    // Convert HTML to base64 for PDF-like treatment
-    const base64Html = btoa(unescape(encodeURIComponent(htmlContent)));
-    
     console.log('Report generated successfully');
     
     return new Response(JSON.stringify({
       success: true,
       reportHtml: htmlContent,
-      pdfData: base64Html, // HTML as base64 for email attachment
       message: "Report generated successfully"
     }), {
       status: 200,
