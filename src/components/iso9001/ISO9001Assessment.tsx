@@ -519,10 +519,7 @@ export const ISO9001Assessment = () => {
   };
 
   const handleBookConsult = () => {
-    toast({
-      title: "Consultation Request",
-      description: "We'll contact you shortly to schedule your free ISO 9001 consultation.",
-    });
+    window.open("https://www.qse-academy.com/live-iso-consultation/", "_blank");
   };
 
   const currentChapterProgress = getChapterProgress(currentChapterIndex);
