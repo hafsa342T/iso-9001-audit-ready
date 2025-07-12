@@ -296,11 +296,94 @@ export const ISO9001Assessment = () => {
     }
   };
 
-  const handleDownloadPDF = () => {
-    toast({
-      title: "PDF Download",
-      description: "Your detailed PDF report is being prepared for download.",
-    });
+  const handleDownloadPDF = async () => {
+    if (!userInfo) {
+      toast({
+        title: "Error",
+        description: "User information is required to generate the PDF report.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      
+      const allResults = getAllResults();
+      const overallScore = allResults.reduce((sum, result) => sum + result.score, 0);
+      const overallMaxScore = allResults.reduce((sum, result) => sum + result.maxScore, 0);
+      const overallPercentage = overallMaxScore > 0 ? Math.round((overallScore / overallMaxScore) * 100) : 0;
+
+      // Prepare data for PDF generation
+      const assessmentData = {
+        userInfo,
+        results: allResults.map(result => {
+          const chapter = iso9001Chapters.find(c => c.id === result.chapterId);
+          return {
+            ...result,
+            chapterTitle: chapter?.title || `Chapter ${result.chapterId}`
+          };
+        }),
+        overallScore,
+        overallPercentage
+      };
+
+      const response = await supabase.functions.invoke('generate-pdf-report', {
+        body: assessmentData
+      });
+
+      if (response.error) {
+        throw new Error(response.error.message);
+      }
+
+      // For HTML response (Option 1)
+      if (response.data) {
+        const blob = new Blob([response.data], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `ISO9001-Assessment-Report-${userInfo.firstName || 'User'}-${new Date().toISOString().split('T')[0]}.html`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+
+        toast({
+          title: "Report Downloaded!",
+          description: "Your ISO 9001 assessment report has been downloaded. You can print it as PDF from your browser.",
+        });
+      }
+
+      // For future PDF response (Option 2)
+      /*
+      if (response.data) {
+        const blob = new Blob([response.data], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `ISO9001-Assessment-Report-${userInfo.firstName || 'User'}-${new Date().toISOString().split('T')[0]}.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+
+        toast({
+          title: "PDF Downloaded!",
+          description: "Your detailed ISO 9001 assessment report has been downloaded.",
+        });
+      }
+      */
+
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      toast({
+        title: "Download Failed",
+        description: "There was an error generating your PDF report. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleBookConsult = () => {
