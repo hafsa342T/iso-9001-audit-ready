@@ -369,8 +369,16 @@ export const ISO9001Assessment = () => {
         body: assessmentData
       });
 
+      console.log('Report response:', reportResponse);
+
       if (reportResponse.error) {
-        throw new Error(reportResponse.error.message);
+        console.error('Report generation error:', reportResponse.error);
+        throw new Error(`Report generation failed: ${reportResponse.error.message}`);
+      }
+
+      if (!reportResponse.data?.reportHtml) {
+        console.error('No report HTML in response:', reportResponse.data);
+        throw new Error('No report content generated');
       }
 
       // Send email with the report
@@ -384,13 +392,15 @@ export const ISO9001Assessment = () => {
         }
       });
 
+      console.log('Email response:', emailResponse);
+
       if (emailResponse.error) {
         throw new Error(emailResponse.error.message);
       }
 
       // Also provide download option
-      if (reportResponse.data) {
-        const blob = new Blob([reportResponse.data], { type: 'text/html' });
+      if (reportResponse.data?.reportHtml) {
+        const blob = new Blob([reportResponse.data.reportHtml], { type: 'text/html' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
