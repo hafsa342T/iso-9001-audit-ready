@@ -148,7 +148,7 @@ export const FinalResults = ({ results, onExportReport }: FinalResultsProps) => 
                 </div>
                 <div className="flex items-center gap-4">
                   <span className="text-sm text-muted-foreground">
-                    {result.score}/{result.maxScore} points
+                    {result.completedQuestions}/{result.totalQuestions} questions
                   </span>
                   <Badge variant={result.percentage >= 80 ? 'default' : result.percentage >= 60 ? 'secondary' : 'destructive'}>
                     {result.percentage}%
