@@ -114,27 +114,32 @@ function generateHTMLReport(data: AssessmentData): string {
 
   // Generate bar chart for scores
   const generateBarChart = () => {
-    const maxBarWidth = 200;
-    const barHeight = 20;
-    const spacing = 35;
-    const chartHeight = results.length * spacing + 40;
+    const maxBarWidth = 160;
+    const barHeight = 16;
+    const spacing = 28;
+    const chartHeight = results.length * spacing + 30;
+    const leftMargin = 100;
     
     let bars = '';
     results.forEach((result, index) => {
-      const y = index * spacing + 20;
+      const y = index * spacing + 15;
       const barWidth = (result.percentage / 100) * maxBarWidth;
       const color = result.percentage >= 80 ? '#22c55e' : result.percentage >= 60 ? '#f59e0b' : '#ef4444';
       
+      // Shorten chapter names for better display
+      const chapterName = result.chapterTitle || `Ch. ${result.chapterId}`;
+      const shortName = chapterName.length > 20 ? chapterName.substring(0, 18) + '...' : chapterName;
+      
       bars += `
-        <rect x="120" y="${y}" width="${maxBarWidth}" height="${barHeight}" fill="#e5e7eb" rx="2"/>
-        <rect x="120" y="${y}" width="${barWidth}" height="${barHeight}" fill="${color}" rx="2"/>
-        <text x="115" y="${y + 14}" text-anchor="end" font-size="10" fill="#374151">${result.chapterTitle || `Ch. ${result.chapterId}`}</text>
-        <text x="${125 + maxBarWidth}" y="${y + 14}" font-size="10" fill="#374151">${result.percentage}%</text>
+        <rect x="${leftMargin}" y="${y}" width="${maxBarWidth}" height="${barHeight}" fill="#e5e7eb" rx="2"/>
+        <rect x="${leftMargin}" y="${y}" width="${barWidth}" height="${barHeight}" fill="${color}" rx="2"/>
+        <text x="${leftMargin - 5}" y="${y + 12}" text-anchor="end" font-size="9" fill="#374151">${shortName}</text>
+        <text x="${leftMargin + maxBarWidth + 5}" y="${y + 12}" font-size="9" fill="#374151" font-weight="bold">${result.percentage}%</text>
       `;
     });
     
     return `
-      <svg width="400" height="${chartHeight}" viewBox="0 0 400 ${chartHeight}">
+      <svg width="320" height="${chartHeight}" viewBox="0 0 320 ${chartHeight}" style="margin: 0 auto; display: block;">
         ${bars}
       </svg>
     `;
@@ -378,7 +383,9 @@ function generateHTMLReport(data: AssessmentData): string {
     </head>
     <body>
         <div class="header">
-            <img src="/lovable-uploads/85e97cdd-e2e4-4638-9ad8-6a54db3d3d2a.png" alt="QSE Academy Logo" class="logo">
+            <div style="width: 200px; height: 80px; margin: 0 auto 20px; background: white; padding: 15px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 24px; color: #2563eb;">
+                QSE ACADEMY
+            </div>
             <h1>ISO 9001 Assessment Report</h1>
             <p>Comprehensive Readiness Analysis</p>
         </div>
