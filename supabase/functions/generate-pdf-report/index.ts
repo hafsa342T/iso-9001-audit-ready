@@ -392,8 +392,8 @@ function generateHTMLReport(data: AssessmentData): string {
 
         <div class="summary-section">
             <h2>Assessment Summary</h2>
-            <p><strong>Participant:</strong> ${userInfo.firstName || 'Anonymous'} ${userInfo.company ? `(${userInfo.company})` : ''}</p>
-            <p><strong>Email:</strong> ${userInfo.email}</p>
+            <p><strong>Participant:</strong> ${userInfo?.firstName || 'Anonymous'} ${userInfo?.company ? `(${userInfo.company})` : ''}</p>
+            <p><strong>Email:</strong> ${userInfo?.email || 'Not provided'}</p>
             <p><strong>Completed:</strong> ${new Date().toLocaleDateString('en-US', { 
                 year: 'numeric', 
                 month: 'long', 
@@ -500,12 +500,12 @@ serve(async (req) => {
 
   try {
     const assessmentData: AssessmentData = await req.json();
-    console.log('Generating report...');
+    console.log('Assessment data received:', JSON.stringify(assessmentData, null, 2));
 
     // Generate HTML report with charts and logo
     const htmlContent = generateHTMLReport(assessmentData);
     
-    console.log('Report generated successfully');
+    console.log('Report generated successfully, length:', htmlContent.length);
     
     return new Response(JSON.stringify({
       success: true,
