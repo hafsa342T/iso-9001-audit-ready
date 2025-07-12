@@ -135,6 +135,8 @@ export const ISO9001Assessment = () => {
 
   const saveAnswerToDatabase = async (answer: Answer) => {
     try {
+      console.log('Saving answer:', answer);
+      
       let questionData = null;
       let chapterId = '';
 
@@ -148,10 +150,17 @@ export const ISO9001Assessment = () => {
         }
       }
       
-      if (!questionData) return;
+      if (!questionData) {
+        console.error('Question not found for answer:', answer);
+        return;
+      }
+
+      console.log('Found question data:', questionData, 'Chapter:', chapterId);
 
       const score = getScoreForAnswer(answer.value, questionData.weight);
       const maxScore = getMaxScoreForAnswer(answer.value, questionData.weight);
+
+      console.log('Calculated scores - score:', score, 'maxScore:', maxScore);
 
       const { error } = await supabase
         .from('assessment_answers')
@@ -166,12 +175,14 @@ export const ISO9001Assessment = () => {
         });
 
       if (error) {
-        console.error('Error saving answer:', error);
+        console.error('Database error saving answer:', error);
         toast({
           title: "Error",
-          description: "Failed to save your answer. Please try again.",
+          description: `Failed to save answer: ${error.message}`,
           variant: "destructive"
         });
+      } else {
+        console.log('Answer saved successfully');
       }
     } catch (error) {
       console.error('Error saving answer:', error);
