@@ -1,4 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+// @deno-types="https://deno.land/x/puppeteer@16.2.0/vendor/puppeteer-core/puppeteer/types.d.ts"
+import puppeteer from "https://deno.land/x/puppeteer@16.2.0/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',

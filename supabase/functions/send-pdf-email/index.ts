@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { Resend } from "npm:resend@2.0.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -10,7 +11,8 @@ interface EmailRequest {
   clientEmail: string;
   clientName: string;
   copyEmail: string;
-  reportHtml: string;
+  reportHtml?: string;
+  pdfData?: string;
   overallScore: number;
 }
 
@@ -28,30 +30,76 @@ const handler = async (req: Request): Promise<Response> => {
 
   try {
     console.log('Processing email request...');
-    const { clientEmail, clientName, copyEmail, reportHtml, overallScore }: EmailRequest = await req.json();
+    const { clientEmail, clientName, copyEmail, reportHtml, pdfData, overallScore }: EmailRequest = await req.json();
 
     console.log("Email request details:", {
       to: clientEmail,
       cc: copyEmail,
       clientName,
-      overallScore
+      overallScore,
+      hasPdfData: !!pdfData,
+      hasHtmlData: !!reportHtml
     });
 
-    // Since we can't use Resend without the API key being properly configured,
-    // let's return a success response for now and log the attempt
-    console.log("Email would be sent to:", clientEmail, "with copy to:", copyEmail);
-    console.log("Report HTML length:", reportHtml.length);
+    const resendApiKey = Deno.env.get("RESEND_API_KEY");
+    
+    if (!resendApiKey) {
+      console.log("Resend API key not configured - returning mock response");
+      return new Response(JSON.stringify({
+        success: true,
+        messageId: `mock_${Date.now()}`,
+        message: "Email would be sent - configure RESEND_API_KEY in Supabase secrets to enable actual sending"
+      }), {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+          ...corsHeaders,
+        },
+      });
+    }
 
-    // Simulate successful email sending
-    const mockResponse = {
+    const resend = new Resend(resendApiKey);
+
+    // Prepare attachment based on available data
+    const attachments = [];
+    if (pdfData) {
+      attachments.push({
+        filename: 'ISO9001-Assessment-Report.pdf',
+        content: pdfData,
+        type: 'application/pdf',
+      });
+    } else if (reportHtml) {
+      attachments.push({
+        filename: 'ISO9001-Assessment-Report.html',
+        content: Buffer.from(reportHtml).toString('base64'),
+        type: 'text/html',
+      });
+    }
+
+    // Send the actual email with attachment
+    const emailResponse = await resend.emails.send({
+      from: "QSE Academy <onboarding@resend.dev>",
+      to: [clientEmail],
+      cc: copyEmail ? [copyEmail] : undefined,
+      subject: `ISO 9001 Assessment Report - ${clientName}`,
+      html: `
+        <h2>Your ISO 9001 Assessment Report is Ready!</h2>
+        <p>Dear ${clientName},</p>
+        <p>Thank you for completing the ISO 9001 readiness assessment. Your overall readiness score is <strong>${overallScore}%</strong>.</p>
+        <p>Please find your detailed assessment report attached${pdfData ? ' as a PDF' : ''}.</p>
+        <br>
+        <p>Best regards,<br>QSE Academy Team</p>
+      `,
+      attachments,
+    });
+
+    console.log("Email sent successfully:", emailResponse);
+
+    return new Response(JSON.stringify({
       success: true,
-      messageId: `mock_${Date.now()}`,
-      message: "Email functionality ready - configure Resend API key to enable actual sending"
-    };
-
-    console.log("Mock email response:", mockResponse);
-
-    return new Response(JSON.stringify(mockResponse), {
+      messageId: emailResponse.id,
+      message: "Report sent successfully via email"
+    }), {
       status: 200,
       headers: {
         "Content-Type": "application/json",

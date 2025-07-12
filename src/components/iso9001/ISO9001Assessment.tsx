@@ -379,7 +379,8 @@ export const ISO9001Assessment = () => {
           clientEmail,
           clientName,
           copyEmail: 'support@qse-academy.com',
-          reportHtml: reportResponse.data,
+          reportHtml: reportResponse.data.reportHtml,
+          pdfData: reportResponse.data.pdfData,
           overallScore: overallPercentage
         }
       });
