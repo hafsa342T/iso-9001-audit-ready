@@ -225,14 +225,6 @@ export const ISO9001Assessment = () => {
 
   return (
     <div className="container mx-auto p-6 max-w-4xl">
-      {/* Logo */}
-      <div className="flex justify-center mb-6">
-        <img 
-          src="/lovable-uploads/1a14d669-33f7-46ab-86aa-cbce13007181.png" 
-          alt="QSE Academy" 
-          className="h-16 w-auto"
-        />
-      </div>
 
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
@@ -401,27 +393,6 @@ export const ISO9001Assessment = () => {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-gray-50 border-t mt-8 -mx-6 px-6 py-6">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <img 
-              src="/lovable-uploads/1a14d669-33f7-46ab-86aa-cbce13007181.png" 
-              alt="QSE Academy" 
-              className="h-8 w-auto"
-            />
-            <span className="font-semibold text-foreground">QSE ACADEMY</span>
-          </div>
-          <div className="text-center md:text-right">
-            <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} QSE Academy. All rights reserved.
-            </p>
-            <p className="text-sm text-muted-foreground">
-              Support: <a href="mailto:support@qse-academy.com" className="text-primary hover:underline">support@qse-academy.com</a>
-            </p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };
