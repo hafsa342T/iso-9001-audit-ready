@@ -75,7 +75,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send the actual email with attachment
     const emailResponse = await resend.emails.send({
-      from: "QSE Academy <noreply@your-domain.com>", // Replace with your validated domain
+      from: "QSE Academy <noreply@qse-academy.com>",
       to: [clientEmail],
       cc: copyEmail ? [copyEmail] : undefined,
       subject: `ISO 9001 Assessment Report - ${clientName}`,
