@@ -14,7 +14,86 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      assessment_answers: {
+        Row: {
+          answer_value: string
+          assessment_id: string
+          chapter_id: string
+          created_at: string
+          id: string
+          max_score: number
+          question_id: string
+          question_weight: number
+          score: number
+          updated_at: string
+        }
+        Insert: {
+          answer_value: string
+          assessment_id: string
+          chapter_id: string
+          created_at?: string
+          id?: string
+          max_score?: number
+          question_id: string
+          question_weight?: number
+          score?: number
+          updated_at?: string
+        }
+        Update: {
+          answer_value?: string
+          assessment_id?: string
+          chapter_id?: string
+          created_at?: string
+          id?: string
+          max_score?: number
+          question_id?: string
+          question_weight?: number
+          score?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_answers_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "assessments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assessments: {
+        Row: {
+          company: string | null
+          created_at: string
+          email: string
+          first_name: string | null
+          id: string
+          overall_progress: number | null
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          company?: string | null
+          created_at?: string
+          email: string
+          first_name?: string | null
+          id?: string
+          overall_progress?: number | null
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          company?: string | null
+          created_at?: string
+          email?: string
+          first_name?: string | null
+          id?: string
+          overall_progress?: number | null
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

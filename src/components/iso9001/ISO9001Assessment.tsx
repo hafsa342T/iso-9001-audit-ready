@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -27,6 +27,7 @@ import {
   BookOpen
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 type ViewMode = 'assessment' | 'summary' | 'email-optin' | 'results';
 
@@ -41,6 +42,8 @@ export const ISO9001Assessment = () => {
     company?: string;
   } | null>(null);
   const [isGeneratingReport, setIsGeneratingReport] = useState(false);
+  const [assessmentId, setAssessmentId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   
   const currentChapter = iso9001Chapters[currentChapterIndex];
   const totalChapters = iso9001Chapters.length;
@@ -50,11 +53,110 @@ export const ISO9001Assessment = () => {
   const answeredQuestions = Object.keys(answers).length;
   const overallProgress = (answeredQuestions / totalQuestions) * 100;
 
-  const handleAnswerChange = (answer: Answer) => {
+  // Auto-save progress when answers change
+  useEffect(() => {
+    if (assessmentId && Object.keys(answers).length > 0) {
+      updateAssessmentProgress();
+    }
+  }, [answers, assessmentId]);
+
+  const updateAssessmentProgress = async () => {
+    if (!assessmentId) return;
+    
+    try {
+      await supabase
+        .from('assessments')
+        .update({ 
+          overall_progress: overallProgress,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', assessmentId);
+    } catch (error) {
+      console.error('Error updating progress:', error);
+    }
+  };
+
+  const startNewAssessment = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('assessments')
+        .insert({
+          email: 'anonymous@temp.com', // Temporary email until user provides one
+          overall_progress: 0,
+          status: 'in_progress'
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      setAssessmentId(data.id);
+    } catch (error) {
+      console.error('Error creating assessment:', error);
+    }
+  };
+
+  // Start a new assessment on component mount
+  useEffect(() => {
+    if (!assessmentId) {
+      startNewAssessment();
+    }
+  }, []);
+
+  const handleAnswerChange = async (answer: Answer) => {
     setAnswers(prev => ({
       ...prev,
       [answer.questionId]: answer
     }));
+
+    // Save to database if we have an assessment ID
+    if (assessmentId) {
+      await saveAnswerToDatabase(answer);
+    }
+  };
+
+  const saveAnswerToDatabase = async (answer: Answer) => {
+    try {
+      let questionData = null;
+      let chapterId = '';
+
+      // Find the question and its chapter
+      for (const chapter of iso9001Chapters) {
+        const question = chapter.questions.find(q => q.id === answer.questionId);
+        if (question) {
+          questionData = question;
+          chapterId = chapter.id;
+          break;
+        }
+      }
+      
+      if (!questionData) return;
+
+      const score = getScoreForAnswer(answer.value, questionData.weight);
+      const maxScore = getMaxScoreForAnswer(answer.value, questionData.weight);
+
+      const { error } = await supabase
+        .from('assessment_answers')
+        .upsert({
+          assessment_id: assessmentId,
+          question_id: answer.questionId,
+          chapter_id: chapterId,
+          answer_value: answer.value,
+          score,
+          max_score: maxScore,
+          question_weight: questionData.weight
+        });
+
+      if (error) {
+        console.error('Error saving answer:', error);
+        toast({
+          title: "Error",
+          description: "Failed to save your answer. Please try again.",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      console.error('Error saving answer:', error);
+    }
   };
 
   const calculateChapterResult = (chapterId: string): AssessmentResult => {
@@ -129,19 +231,69 @@ export const ISO9001Assessment = () => {
   const handleEmailSubmit = async (email: string, firstName?: string, company?: string) => {
     setIsGeneratingReport(true);
     
-    // Store user info
-    setUserInfo({ email, firstName, company });
-    
-    // Simulate report generation
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    toast({
-      title: "Report Generated!",
-      description: "Your ISO 9001 readiness report has been generated and sent to your email.",
-    });
-    
-    setIsGeneratingReport(false);
-    setViewMode('results');
+    try {
+      // Create or update assessment record
+      let currentAssessmentId = assessmentId;
+      
+      if (!currentAssessmentId) {
+        const { data, error } = await supabase
+          .from('assessments')
+          .insert({
+            email,
+            first_name: firstName,
+            company,
+            overall_progress: overallProgress,
+            status: 'completed'
+          })
+          .select()
+          .single();
+
+        if (error) throw error;
+        currentAssessmentId = data.id;
+        setAssessmentId(currentAssessmentId);
+      } else {
+        // Update existing assessment
+        const { error } = await supabase
+          .from('assessments')
+          .update({
+            email,
+            first_name: firstName,
+            company,
+            overall_progress: overallProgress,
+            status: 'completed'
+          })
+          .eq('id', currentAssessmentId);
+
+        if (error) throw error;
+      }
+
+      // Store user info
+      setUserInfo({ email, firstName, company });
+      
+      // Save all answers to database
+      for (const answer of Object.values(answers)) {
+        await saveAnswerToDatabase(answer);
+      }
+      
+      // Simulate report generation
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      toast({
+        title: "Report Generated!",
+        description: "Your ISO 9001 readiness report has been generated and saved.",
+      });
+      
+      setViewMode('results');
+    } catch (error) {
+      console.error('Error saving assessment:', error);
+      toast({
+        title: "Error",
+        description: "Failed to save your assessment. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsGeneratingReport(false);
+    }
   };
 
   const handleDownloadPDF = () => {
