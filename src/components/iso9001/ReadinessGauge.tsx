@@ -22,33 +22,46 @@ export const ReadinessGauge: React.FC<ReadinessGaugeProps> = ({ percentage }) =>
 
   return (
     <div className="relative w-64 h-64 mx-auto">
-      <div className="absolute inset-0">
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
-            <Pie
-              data={data}
-              cx="50%"
-              cy="50%"
-              startAngle={90}
-              endAngle={-270}
-              innerRadius={60}
-              outerRadius={80}
-              dataKey="value"
-              stroke="none"
-            >
-              {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={colors[index]} />
-              ))}
-            </Pie>
-          </PieChart>
-        </ResponsiveContainer>
-      </div>
-      <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
-        <div className="text-center">
-          <div className="text-4xl font-bold text-primary">{percentage}%</div>
-          <div className="text-sm text-muted-foreground">Ready</div>
-        </div>
-      </div>
+      <ResponsiveContainer width="100%" height="100%">
+        <PieChart>
+          <Pie
+            data={data}
+            cx="50%"
+            cy="50%"
+            startAngle={90}
+            endAngle={-270}
+            innerRadius={60}
+            outerRadius={80}
+            dataKey="value"
+            stroke="none"
+          >
+            {data.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={colors[index]} />
+            ))}
+          </Pie>
+          {/* Add text directly to the SVG */}
+          <text 
+            x="50%" 
+            y="45%" 
+            textAnchor="middle" 
+            dominantBaseline="middle" 
+            className="text-4xl font-bold fill-primary"
+            style={{ fontSize: '32px', fontWeight: 'bold' }}
+          >
+            {percentage}%
+          </text>
+          <text 
+            x="50%" 
+            y="55%" 
+            textAnchor="middle" 
+            dominantBaseline="middle" 
+            className="text-sm fill-muted-foreground"
+            style={{ fontSize: '14px' }}
+          >
+            Ready
+          </text>
+        </PieChart>
+      </ResponsiveContainer>
     </div>
   );
 };
