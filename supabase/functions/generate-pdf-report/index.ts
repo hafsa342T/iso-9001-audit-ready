@@ -205,39 +205,30 @@ function generateHTMLReport(data: AssessmentData): string {
             .readiness-gauge {
                 text-align: center;
                 margin: 30px 0;
+                padding: 40px;
+                background: #f8fafc;
+                border-radius: 12px;
+                border-left: 5px solid ${readinessLevel.color};
             }
             
-            .gauge-container {
-                position: relative;
-                width: 200px;
-                height: 200px;
-                margin: 0 auto 20px;
-            }
-            
-            .gauge-svg {
-                width: 200px;
-                height: 200px;
-            }
-            
-            .gauge-score {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                font-size: 2rem;
+            .score-display {
+                font-size: 4rem;
                 font-weight: bold;
                 color: ${readinessLevel.color};
-                z-index: 10;
+                margin-bottom: 15px;
             }
             
-            .gauge-level {
-                position: absolute;
-                top: 60%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                font-size: 0.9rem;
+            .readiness-level {
+                font-size: 1.8rem;
+                font-weight: 600;
+                color: ${readinessLevel.color};
+                margin-bottom: 15px;
+            }
+            
+            .readiness-description {
                 color: #6b7280;
-                z-index: 10;
+                font-size: 1.1rem;
+                margin-bottom: 0;
             }
             
             .readiness-level {
@@ -395,30 +386,8 @@ function generateHTMLReport(data: AssessmentData): string {
 
         <div class="readiness-gauge">
             <h2>Overall Readiness Score</h2>
-            <div class="gauge-container">
-                <svg class="gauge-svg" viewBox="0 0 200 200">
-                    <!-- Background arc (270 degrees, 3/4 circle) -->
-                    <circle cx="100" cy="100" r="75" 
-                            fill="none" 
-                            stroke="#e5e7eb" 
-                            stroke-width="15" 
-                            stroke-dasharray="353" 
-                            stroke-dashoffset="88.25" 
-                            transform="rotate(-135 100 100)"
-                            stroke-linecap="round"/>
-                    <!-- Filled arc based on exact percentage -->
-                    <circle cx="100" cy="100" r="75" 
-                            fill="none" 
-                            stroke="${readinessLevel.color}" 
-                            stroke-width="15" 
-                            stroke-dasharray="${(overallPercentage || 0) * 3.53} 353" 
-                            stroke-dashoffset="88.25" 
-                            transform="rotate(-135 100 100)"
-                            stroke-linecap="round"/>
-                </svg>
-                <div class="gauge-score">${overallPercentage || 0}%</div>
-                <div class="gauge-level">${readinessLevel.level}</div>
-            </div>
+            <div class="score-display">${overallPercentage || 0}%</div>
+            <div class="readiness-level">${readinessLevel.level}</div>
             <div class="readiness-description">${readinessLevel.description}</div>
         </div>
 
