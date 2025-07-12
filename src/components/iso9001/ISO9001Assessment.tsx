@@ -172,6 +172,8 @@ export const ISO9001Assessment = () => {
           score,
           max_score: maxScore,
           question_weight: questionData.weight
+        }, {
+          onConflict: 'assessment_id,question_id'
         });
 
       if (error) {
