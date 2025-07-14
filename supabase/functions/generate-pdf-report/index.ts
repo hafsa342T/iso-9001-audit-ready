@@ -386,7 +386,7 @@ function generateHTMLReport(data: AssessmentData): string {
         <div class="summary-section">
             <h2>Assessment Summary</h2>
             <p><strong>Participant:</strong> ${userInfo?.firstName || 'Anonymous'}</p>
-            ${userInfo?.company ? `<p><strong>Company:</strong> ${userInfo.company}</p>` : ''}
+            <p><strong>Company:</strong> ${userInfo?.company || 'No company provided'}</p>
             <p><strong>Email:</strong> ${userInfo?.email || 'Not provided'}</p>
             ${reportId ? `<p><strong>Report ID:</strong> <code style="background: #f3f4f6; padding: 2px 8px; border-radius: 4px; font-family: monospace;">${reportId}</code></p>` : ''}
             <p><strong>Completed:</strong> ${new Date().toLocaleDateString('en-US', { 
@@ -490,12 +490,12 @@ serve(async (req) => {
 
   try {
     const assessmentData: AssessmentData = await req.json();
-    console.log('=== ASSESSMENT DATA RECEIVED ===');
-    console.log('Full data:', JSON.stringify(assessmentData, null, 2));
-    console.log('Report ID:', assessmentData.reportId);
-    console.log('Company:', assessmentData.userInfo?.company);
-    console.log('First Name:', assessmentData.userInfo?.firstName);
-    console.log('================================');
+    console.log('=== COMPANY NAME DEBUG ===');
+    console.log('userInfo:', assessmentData.userInfo);
+    console.log('company field:', assessmentData.userInfo?.company);
+    console.log('company type:', typeof assessmentData.userInfo?.company);
+    console.log('company length:', assessmentData.userInfo?.company?.length);
+    console.log('=========================');
 
     // Generate HTML report with charts and logo
     const htmlContent = generateHTMLReport(assessmentData);
