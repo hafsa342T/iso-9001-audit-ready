@@ -161,7 +161,7 @@ function generateHTMLReport(data: AssessmentData): string {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>ISO 9001 Assessment Report${userInfo?.company ? ` - ${userInfo.company}` : ''} - ${userInfo.firstName || 'User'}</title>
+        <title>ISO 9001 Assessment Report${userInfo?.company ? ` - ${userInfo.company}` : ''}</title>
         <style>
             body {
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -380,13 +380,12 @@ function generateHTMLReport(data: AssessmentData): string {
             </div>
             <h1>ISO 9001 Assessment Report</h1>
             ${userInfo?.company ? `<p style="font-size: 1.3rem; font-weight: 600; margin: 10px 0; color: #374151;">for ${userInfo.company}</p>` : ''}
-            ${reportId ? `<p style="font-size: 0.9rem; color: #6b7280; margin: 5px 0;">Report ID: <span style="background: rgba(255,255,255,0.2); padding: 3px 8px; border-radius: 4px; font-family: monospace;">${reportId}</span></p>` : ''}
             <p>Comprehensive Readiness Analysis</p>
         </div>
 
         <div class="summary-section">
             <h2>Assessment Summary</h2>
-            <p><strong>Participant:</strong> ${userInfo?.firstName || 'Anonymous'} ${userInfo?.company ? `(${userInfo.company})` : ''}</p>
+            <p><strong>Participant:</strong> ${userInfo?.firstName || 'Anonymous'}</p>
             ${userInfo?.company ? `<p><strong>Company:</strong> ${userInfo.company}</p>` : ''}
             <p><strong>Email:</strong> ${userInfo?.email || 'Not provided'}</p>
             ${reportId ? `<p><strong>Report ID:</strong> <code style="background: #f3f4f6; padding: 2px 8px; border-radius: 4px; font-family: monospace;">${reportId}</code></p>` : ''}
