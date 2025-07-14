@@ -368,6 +368,10 @@ export const ISO9001Assessment = () => {
         overallPercentage
       };
 
+      console.log('Assessment data being sent to PDF generation:', assessmentData);
+      console.log('Report ID:', reportId);
+      console.log('User info:', userInfo);
+
       console.log('Generating report and sending email...');
 
       // Generate the HTML report

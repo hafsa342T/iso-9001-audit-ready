@@ -50,6 +50,15 @@ const getReadinessLevel = (percentage: number): { level: string; color: string; 
 
 function generateHTMLReport(data: AssessmentData): string {
   const { userInfo, reportId, results, overallScore, overallPercentage } = data;
+  
+  // Debug logging
+  console.log('Generating HTML report with data:', {
+    userInfo,
+    reportId,
+    hasResults: !!results,
+    overallPercentage
+  });
+  
   const readinessLevel = getReadinessLevel(overallPercentage || 0);
   
   // Generate chart data for radar chart
@@ -152,7 +161,7 @@ function generateHTMLReport(data: AssessmentData): string {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>ISO 9001 Assessment Report - ${userInfo.firstName || 'User'}</title>
+        <title>ISO 9001 Assessment Report${userInfo?.company ? ` - ${userInfo.company}` : ''} - ${userInfo.firstName || 'User'}</title>
         <style>
             body {
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -482,7 +491,12 @@ serve(async (req) => {
 
   try {
     const assessmentData: AssessmentData = await req.json();
-    console.log('Assessment data received:', JSON.stringify(assessmentData, null, 2));
+    console.log('=== ASSESSMENT DATA RECEIVED ===');
+    console.log('Full data:', JSON.stringify(assessmentData, null, 2));
+    console.log('Report ID:', assessmentData.reportId);
+    console.log('Company:', assessmentData.userInfo?.company);
+    console.log('First Name:', assessmentData.userInfo?.firstName);
+    console.log('================================');
 
     // Generate HTML report with charts and logo
     const htmlContent = generateHTMLReport(assessmentData);
