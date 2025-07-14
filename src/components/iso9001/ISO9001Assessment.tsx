@@ -314,8 +314,8 @@ export const ISO9001Assessment = () => {
       setUserInfo({ email, firstName, company });
       
       // Generate a unique report ID
-      const reportId = `ISO-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-      setReportId(reportId);
+      const generatedReportId = `ISO-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      setReportId(generatedReportId);
       
       // Save all answers to database
       console.log('Saving answers to database...');
@@ -327,9 +327,9 @@ export const ISO9001Assessment = () => {
       }
       console.log('All answers saved successfully');
       
-      // Generate and email the report
-      console.log('Generating and emailing report...');
-      await handleDownloadAndEmailPDF(email, firstName || 'User');
+      // Generate and email the report using the generated report ID
+      console.log('Generating and emailing report with ID:', generatedReportId);
+      await handleDownloadAndEmailPDF(email, firstName || 'User', generatedReportId);
       
       setViewMode('results');
     } catch (error) {
@@ -344,7 +344,7 @@ export const ISO9001Assessment = () => {
     }
   };
 
-  const handleDownloadAndEmailPDF = async (clientEmail: string, clientName: string) => {
+  const handleDownloadAndEmailPDF = async (clientEmail: string, clientName: string, generatedReportId?: string) => {
     try {
       setIsLoading(true);
       
@@ -353,10 +353,11 @@ export const ISO9001Assessment = () => {
       const overallMaxScore = allResults.reduce((sum, result) => sum + result.maxScore, 0);
       const overallPercentage = overallMaxScore > 0 ? Math.round((overallScore / overallMaxScore) * 100) : 0;
 
-      // Prepare data for PDF generation
+      // Prepare data for PDF generation (use passed reportId or current state)
+      const reportIdToUse = generatedReportId || reportId;
       const assessmentData = {
         userInfo: { ...userInfo, email: clientEmail, firstName: clientName },
-        reportId,
+        reportId: reportIdToUse,
         results: allResults.map(result => {
           const chapter = iso9001Chapters.find(c => c.id === result.chapterId);
           return {
@@ -369,7 +370,7 @@ export const ISO9001Assessment = () => {
       };
 
       console.log('Assessment data being sent to PDF generation:', assessmentData);
-      console.log('Report ID:', reportId);
+      console.log('Report ID being used:', reportIdToUse);
       console.log('User info:', userInfo);
 
       console.log('Generating report and sending email...');
