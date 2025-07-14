@@ -591,7 +591,7 @@ export const ISO9001Assessment = () => {
     <div className="container mx-auto p-6 max-w-4xl">
 
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="mb-6">
         <div>
           <h1 className="text-3xl font-bold text-foreground">ISO 9001 Audit Readiness Assessment</h1>
           <div className="mt-3 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
@@ -599,15 +599,6 @@ export const ISO9001Assessment = () => {
               Answer a few key questions and get your instant readiness report, including prioritized actions to prepare for audit.
             </p>
           </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <Badge variant="outline" className="gap-1">
-            <BookOpen className="w-3 h-3" />
-            Chapter {currentChapter.id}
-          </Badge>
-          <Badge variant="secondary">
-            {currentChapterIndex + 1} of {totalChapters}
-          </Badge>
         </div>
       </div>
 
