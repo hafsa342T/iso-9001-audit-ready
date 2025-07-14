@@ -11,6 +11,7 @@ interface AssessmentData {
     firstName?: string;
     company?: string;
   };
+  reportId?: string;
   results: Array<{
     chapterId: string;
     chapterTitle: string;
@@ -48,7 +49,7 @@ const getReadinessLevel = (percentage: number): { level: string; color: string; 
 };
 
 function generateHTMLReport(data: AssessmentData): string {
-  const { userInfo, results, overallScore, overallPercentage } = data;
+  const { userInfo, reportId, results, overallScore, overallPercentage } = data;
   const readinessLevel = getReadinessLevel(overallPercentage || 0);
   
   // Generate chart data for radar chart
@@ -375,7 +376,9 @@ function generateHTMLReport(data: AssessmentData): string {
         <div class="summary-section">
             <h2>Assessment Summary</h2>
             <p><strong>Participant:</strong> ${userInfo?.firstName || 'Anonymous'} ${userInfo?.company ? `(${userInfo.company})` : ''}</p>
+            ${userInfo?.company ? `<p><strong>Company:</strong> ${userInfo.company}</p>` : ''}
             <p><strong>Email:</strong> ${userInfo?.email || 'Not provided'}</p>
+            ${reportId ? `<p><strong>Report ID:</strong> <code style="background: #f3f4f6; padding: 2px 8px; border-radius: 4px; font-family: monospace;">${reportId}</code></p>` : ''}
             <p><strong>Completed:</strong> ${new Date().toLocaleDateString('en-US', { 
                 year: 'numeric', 
                 month: 'long', 

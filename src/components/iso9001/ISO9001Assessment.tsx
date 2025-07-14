@@ -44,6 +44,7 @@ export const ISO9001Assessment = () => {
   const [isGeneratingReport, setIsGeneratingReport] = useState(false);
   const [assessmentId, setAssessmentId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [reportId, setReportId] = useState<string | null>(null);
   
   const currentChapter = iso9001Chapters[currentChapterIndex];
   const totalChapters = iso9001Chapters.length;
@@ -309,8 +310,12 @@ export const ISO9001Assessment = () => {
         console.log('Assessment updated successfully');
       }
 
-      // Store user info
+      // Store user info and generate report ID
       setUserInfo({ email, firstName, company });
+      
+      // Generate a unique report ID
+      const reportId = `ISO-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      setReportId(reportId);
       
       // Save all answers to database
       console.log('Saving answers to database...');
@@ -351,6 +356,7 @@ export const ISO9001Assessment = () => {
       // Prepare data for PDF generation
       const assessmentData = {
         userInfo: { ...userInfo, email: clientEmail, firstName: clientName },
+        reportId,
         results: allResults.map(result => {
           const chapter = iso9001Chapters.find(c => c.id === result.chapterId);
           return {
@@ -449,6 +455,7 @@ export const ISO9001Assessment = () => {
       // Prepare data for PDF generation
       const assessmentData = {
         userInfo,
+        reportId,
         results: allResults.map(result => {
           const chapter = iso9001Chapters.find(c => c.id === result.chapterId);
           return {
@@ -543,6 +550,7 @@ export const ISO9001Assessment = () => {
         userInfo={userInfo || undefined}
         onDownloadPDF={handleDownloadPDF}
         onBookConsult={handleBookConsult}
+        reportId={reportId || undefined}
       />
     );
   }

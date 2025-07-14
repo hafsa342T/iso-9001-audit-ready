@@ -8,9 +8,15 @@ import { Download, Award, AlertTriangle, XCircle, CheckCircle } from "lucide-rea
 interface FinalResultsProps {
   results: AssessmentResult[];
   onExportReport: () => void;
+  userInfo?: {
+    email: string;
+    firstName?: string;
+    company?: string;
+  };
+  reportId?: string;
 }
 
-export const FinalResults = ({ results, onExportReport }: FinalResultsProps) => {
+export const FinalResults = ({ results, onExportReport, userInfo, reportId }: FinalResultsProps) => {
   const totalScore = results.reduce((sum, result) => sum + result.score, 0);
   const totalMaxScore = results.reduce((sum, result) => sum + result.maxScore, 0);
   const overallPercentage = totalMaxScore > 0 ? Math.round((totalScore / totalMaxScore) * 100) : 0;
@@ -61,6 +67,16 @@ export const FinalResults = ({ results, onExportReport }: FinalResultsProps) => 
           <CardTitle className="text-2xl font-bold">
             ISO 9001 Audit Readiness Assessment
           </CardTitle>
+          {userInfo?.company && (
+            <p className="text-lg font-semibold text-muted-foreground">
+              {userInfo.company}
+            </p>
+          )}
+          {reportId && (
+            <p className="text-sm text-muted-foreground">
+              Report ID: {reportId}
+            </p>
+          )}
           <div className="flex justify-center">
             <Badge 
               variant={getVariantFromColor(readiness.color)}

@@ -18,13 +18,15 @@ interface EnhancedResultsProps {
   };
   onDownloadPDF: () => void;
   onBookConsult?: () => void;
+  reportId?: string;
 }
 
 export const EnhancedResults: React.FC<EnhancedResultsProps> = ({
   results,
   userInfo,
   onDownloadPDF,
-  onBookConsult
+  onBookConsult,
+  reportId
 }) => {
   const totalScore = results.reduce((sum, result) => sum + result.score, 0);
   const maxScore = results.reduce((sum, result) => sum + result.maxScore, 0);
@@ -142,6 +144,11 @@ export const EnhancedResults: React.FC<EnhancedResultsProps> = ({
           )}
           {userInfo?.firstName && (
             <p className="text-lg text-muted-foreground">Prepared for {userInfo.firstName}</p>
+          )}
+          {reportId && (
+            <p className="text-sm text-muted-foreground font-mono">
+              Report ID: {reportId}
+            </p>
           )}
           <p className="text-sm text-muted-foreground">
             Generated on {new Date().toLocaleDateString()}
