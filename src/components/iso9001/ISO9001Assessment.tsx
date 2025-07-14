@@ -593,8 +593,7 @@ export const ISO9001Assessment = () => {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">ISO 9001 Audit Readiness</h1>
-          <p className="text-muted-foreground">Quality Management System Assessment</p>
+          <h1 className="text-3xl font-bold text-foreground">ISO 9001 Audit Readiness Assessment</h1>
         </div>
         <div className="flex items-center gap-2">
           <Badge variant="outline" className="gap-1">
