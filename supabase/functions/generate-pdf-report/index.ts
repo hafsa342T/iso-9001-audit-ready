@@ -370,6 +370,8 @@ function generateHTMLReport(data: AssessmentData): string {
                 QSE ACADEMY
             </div>
             <h1>ISO 9001 Assessment Report</h1>
+            ${userInfo?.company ? `<p style="font-size: 1.3rem; font-weight: 600; margin: 10px 0; color: #374151;">for ${userInfo.company}</p>` : ''}
+            ${reportId ? `<p style="font-size: 0.9rem; color: #6b7280; margin: 5px 0;">Report ID: <span style="background: rgba(255,255,255,0.2); padding: 3px 8px; border-radius: 4px; font-family: monospace;">${reportId}</span></p>` : ''}
             <p>Comprehensive Readiness Analysis</p>
         </div>
 
