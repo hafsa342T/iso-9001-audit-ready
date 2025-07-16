@@ -1,6 +1,6 @@
 # ISO 9001 Audit Readiness Assessment – Free Tool
 
-This repository introduces a free ISO 9001:2015 audit readiness assessment developed by QSE Academy. It is designed to help organizations evaluate their compliance with ISO 9001 requirements and identify gaps before undergoing a certification or surveillance audit.
+This repository introduces an ISO 9001:2015 audit readiness assessment developed by QSE Academy. It is designed to help organizations evaluate their compliance with ISO 9001 requirements and identify gaps before undergoing a certification or surveillance audit.
 
 The tool provides a guided, structured self-assessment based on the clauses of ISO 9001:2015 and reflects what certification bodies typically evaluate.
 
@@ -21,7 +21,7 @@ This tool is intended for:
 - Certification Candidates
 - Organizations preparing for first-time or renewal audits
 
-## Access the Free Assessment Tool
+## Access the Assessment Tool
 
 You can access the ISO 9001 audit readiness tool here:
 
