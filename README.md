@@ -1,73 +1,43 @@
-# Welcome to your Lovable project
+# ISO 9001 Audit Readiness Assessment – Free Tool
 
-## Project info
+This repository introduces a free ISO 9001:2015 audit readiness assessment developed by QSE Academy. It is designed to help organizations evaluate their compliance with ISO 9001 requirements and identify gaps before undergoing a certification or surveillance audit.
 
-**URL**: https://lovable.dev/projects/5818ab8c-e04c-49c9-9c5b-4d2a27c41540
+The tool provides a guided, structured self-assessment based on the clauses of ISO 9001:2015 and reflects what certification bodies typically evaluate.
 
-## How can I edit this code?
+## What the Tool Does
 
-There are several ways of editing your application.
+- Assesses your organization's implementation across all ISO 9001 clauses
+- Identifies strengths, weaknesses, and non-conformities
+- Calculates your audit readiness level
+- Provides a downloadable summary report
+- Helps quality managers prepare evidence and documentation in advance
 
-**Use Lovable**
+## Who Should Use It
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/5818ab8c-e04c-49c9-9c5b-4d2a27c41540) and start prompting.
+This tool is intended for:
+- QHSE Managers and Coordinators
+- Internal Auditors
+- ISO 9001 Implementation Consultants
+- Certification Candidates
+- Organizations preparing for first-time or renewal audits
 
-Changes made via Lovable will be committed automatically to this repo.
+## Access the Free Assessment Tool
 
-**Use your preferred IDE**
+You can access the ISO 9001 audit readiness tool here:
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+[ISO 9001 Audit Readiness Assessment Tool](https://www.qse-academy.com/audit-tool/)
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+No account or registration is required. The tool generates results instantly.
 
-Follow these steps:
+## Related Resources
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+QSE Academy also provides:
+- A complete [ISO 9001 Documentation Kit](https://www.qse-academy.com/iso9001version2015/)
+- An [ISO 9001 Process Mapping Tool](https://www.qse-academy.com/iso-9001-process-mapping-tool/)
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+These resources are designed to support full implementation and internal audit preparation.
 
-# Step 3: Install the necessary dependencies.
-npm i
+## Disclaimer
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/5818ab8c-e04c-49c9-9c5b-4d2a27c41540) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+This tool is for self-evaluation and training purposes only. It does not replace an official audit or third-party certification. Results should be interpreted in the context of your organization’s specific activities, scope, and risk exposure.
+[![License: CC BY-NC-ND 4.0](https://img.shields.io/badge/License-CC%20BY--NC--ND%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-nd/4.0/)
