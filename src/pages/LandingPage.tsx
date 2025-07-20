@@ -24,9 +24,20 @@ const LandingPage = () => {
               Start Free Assessment
             </Button>
           </Link>
-          <p className="text-sm text-muted-foreground mt-4">
-            ✓ Completely free • ✓ No registration required • ✓ Instant results
-          </p>
+          <div className="flex flex-wrap justify-center gap-4 mt-8">
+            <div className="flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full border border-primary/20">
+              <CheckCircle className="h-5 w-5 text-primary" />
+              <span className="text-primary font-medium">Completely Free</span>
+            </div>
+            <div className="flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full border border-primary/20">
+              <Shield className="h-5 w-5 text-primary" />
+              <span className="text-primary font-medium">No Registration Required</span>
+            </div>
+            <div className="flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full border border-primary/20">
+              <Target className="h-5 w-5 text-primary" />
+              <span className="text-primary font-medium">Instant Results</span>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -245,14 +256,6 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-8 px-4 bg-muted/50">
-        <div className="max-w-4xl mx-auto text-center">
-          <p className="text-muted-foreground">
-            © 2025 QSE Academy. This free tool is provided for educational and assessment purposes.
-          </p>
-        </div>
-      </footer>
     </div>
   );
 };
