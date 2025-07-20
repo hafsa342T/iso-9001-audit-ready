@@ -147,7 +147,7 @@ const LandingPage = () => {
       </section>
 
       {/* What is ISO 9001 Section */}
-      <section className="py-16 px-4">
+      <section className="py-8 px-4">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl font-bold mb-8 text-center">Understanding ISO 9001:2015</h2>
           <div className="grid md:grid-cols-2 gap-8 mb-12">
@@ -183,7 +183,7 @@ const LandingPage = () => {
       </section>
 
       {/* Why It Matters Section */}
-      <section className="py-16 px-4 bg-muted/30">
+      <section className="py-8 px-4 bg-muted/30">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl font-bold mb-8 text-center">Why Audit Readiness Matters</h2>
           <div className="grid md:grid-cols-2 gap-8">
@@ -218,7 +218,7 @@ const LandingPage = () => {
       </section>
 
       {/* Professional Development Section */}
-      <section className="py-16 px-4">
+      <section className="py-8 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold mb-8">Enhance Your Quality Management Expertise</h2>
           <p className="text-lg text-muted-foreground mb-8 max-w-3xl mx-auto">
