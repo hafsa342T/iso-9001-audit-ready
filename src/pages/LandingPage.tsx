@@ -147,9 +147,9 @@ const LandingPage = () => {
       </section>
 
       {/* What is ISO 9001 Section */}
-      <section className="py-8 px-4">
+      <section className="py-6 px-4">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold mb-8 text-center">Understanding ISO 9001:2015</h2>
+          <h2 className="text-3xl font-bold mb-12 text-center">Understanding ISO 9001:2015</h2>
           <div className="grid md:grid-cols-2 gap-8 mb-12">
             <div>
               <p className="text-muted-foreground mb-4 text-justify">
@@ -183,9 +183,9 @@ const LandingPage = () => {
       </section>
 
       {/* Why It Matters Section */}
-      <section className="py-8 px-4 bg-muted/30">
+      <section className="py-6 px-4 bg-muted/30">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold mb-8 text-center">Why Audit Readiness Matters</h2>
+          <h2 className="text-3xl font-bold mb-12 text-center">Why Audit Readiness Matters</h2>
           <div className="grid md:grid-cols-2 gap-8">
             <div>
               <h3 className="text-xl font-semibold mb-4">Reduce Audit Risks</h3>
@@ -218,9 +218,9 @@ const LandingPage = () => {
       </section>
 
       {/* Professional Development Section */}
-      <section className="py-8 px-4">
+      <section className="py-6 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-8">Enhance Your Quality Management Expertise</h2>
+          <h2 className="text-3xl font-bold mb-12">Enhance Your Quality Management Expertise</h2>
           <p className="text-lg text-muted-foreground mb-8 max-w-3xl mx-auto">
             While our free assessment tool provides valuable insights into your current audit readiness, developing deep expertise in ISO 9001 
             implementation requires comprehensive training and practical experience.
