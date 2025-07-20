@@ -41,79 +41,8 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* What is ISO 9001 Section */}
-      <section className="py-16 px-4">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold mb-8 text-center">Understanding ISO 9001:2015</h2>
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
-            <div>
-              <p className="text-muted-foreground mb-4">
-                ISO 9001:2015 is the international standard for Quality Management Systems (QMS), trusted by over one million organizations worldwide. 
-                This standard provides a framework for delivering consistent quality, improving customer satisfaction, and demonstrating continuous improvement.
-              </p>
-              <p className="text-muted-foreground mb-4">
-                The 2015 revision introduced risk-based thinking, leadership engagement, and process-based approaches, making it more relevant for modern organizations. 
-                Understanding and implementing ISO 9001 requirements is crucial for maintaining certification and achieving operational excellence.
-              </p>
-            </div>
-            <div>
-              <p className="text-muted-foreground mb-4">
-                Regular audit readiness assessments help organizations identify compliance gaps before external audits, reducing the risk of non-conformities 
-                and ensuring smooth certification processes. Our tool evaluates all key clauses of the standard, providing comprehensive insights into your QMS maturity.
-              </p>
-              <p className="text-muted-foreground">
-                Learn more about ISO 9001 standards and implementation best practices from the{" "}
-                <a 
-                  href="https://asq.org/quality-resources/iso-9001" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-primary hover:text-primary/80 underline"
-                >
-                  American Society for Quality (ASQ)
-                </a>, a leading authority on quality management systems.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Why It Matters Section */}
-      <section className="py-16 px-4 bg-muted/30">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold mb-8 text-center">Why Audit Readiness Matters</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div>
-              <h3 className="text-xl font-semibold mb-4">Reduce Audit Risks</h3>
-              <p className="text-muted-foreground mb-6">
-                Proactive assessment helps identify potential non-conformities before they become audit findings. Organizations that regularly assess their 
-                readiness experience 40% fewer major non-conformities during certification audits.
-              </p>
-              
-              <h3 className="text-xl font-semibold mb-4">Continuous Improvement</h3>
-              <p className="text-muted-foreground mb-6">
-                Regular readiness assessments support the Plan-Do-Check-Act cycle, enabling organizations to continuously enhance their QMS effectiveness 
-                and demonstrate commitment to quality excellence.
-              </p>
-            </div>
-            <div>
-              <h3 className="text-xl font-semibold mb-4">Cost-Effective Preparation</h3>
-              <p className="text-muted-foreground mb-6">
-                Early identification of gaps allows for strategic resource allocation and prevents costly audit delays or failures. 
-                Investing in readiness assessment saves organizations an average of 30% in audit-related costs.
-              </p>
-              
-              <h3 className="text-xl font-semibold mb-4">Stakeholder Confidence</h3>
-              <p className="text-muted-foreground">
-                Demonstrating audit readiness builds confidence with customers, suppliers, and regulatory bodies, enhancing your organization's 
-                reputation and competitive advantage in the marketplace.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Who It's For Section */}
-      <section className="py-16 px-4">
+      <section className="py-16 px-4 bg-muted/30">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl font-bold mb-8 text-center">Who Should Use This Tool</h2>
           <div className="grid md:grid-cols-3 gap-6">
@@ -212,6 +141,77 @@ const LandingPage = () => {
                   </div>
                 </CardContent>
               </Card>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* What is ISO 9001 Section */}
+      <section className="py-16 px-4">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl font-bold mb-8 text-center">Understanding ISO 9001:2015</h2>
+          <div className="grid md:grid-cols-2 gap-8 mb-12">
+            <div>
+              <p className="text-muted-foreground mb-4">
+                ISO 9001:2015 is the international standard for Quality Management Systems (QMS), trusted by over one million organizations worldwide. 
+                This standard provides a framework for delivering consistent quality, improving customer satisfaction, and demonstrating continuous improvement.
+              </p>
+              <p className="text-muted-foreground mb-4">
+                The 2015 revision introduced risk-based thinking, leadership engagement, and process-based approaches, making it more relevant for modern organizations. 
+                Understanding and implementing ISO 9001 requirements is crucial for maintaining certification and achieving operational excellence.
+              </p>
+            </div>
+            <div>
+              <p className="text-muted-foreground mb-4">
+                Regular audit readiness assessments help organizations identify compliance gaps before external audits, reducing the risk of non-conformities 
+                and ensuring smooth certification processes. Our tool evaluates all key clauses of the standard, providing comprehensive insights into your QMS maturity.
+              </p>
+              <p className="text-muted-foreground">
+                Learn more about ISO 9001 standards and implementation best practices from the{" "}
+                <a 
+                  href="https://asq.org/quality-resources/iso-9001" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-primary hover:text-primary/80 underline"
+                >
+                  American Society for Quality (ASQ)
+                </a>, a leading authority on quality management systems.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Why It Matters Section */}
+      <section className="py-16 px-4 bg-muted/30">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl font-bold mb-8 text-center">Why Audit Readiness Matters</h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div>
+              <h3 className="text-xl font-semibold mb-4">Reduce Audit Risks</h3>
+              <p className="text-muted-foreground mb-6">
+                Proactive assessment helps identify potential non-conformities before they become audit findings. Organizations that regularly assess their 
+                readiness experience 40% fewer major non-conformities during certification audits.
+              </p>
+              
+              <h3 className="text-xl font-semibold mb-4">Continuous Improvement</h3>
+              <p className="text-muted-foreground mb-6">
+                Regular readiness assessments support the Plan-Do-Check-Act cycle, enabling organizations to continuously enhance their QMS effectiveness 
+                and demonstrate commitment to quality excellence.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold mb-4">Cost-Effective Preparation</h3>
+              <p className="text-muted-foreground mb-6">
+                Early identification of gaps allows for strategic resource allocation and prevents costly audit delays or failures. 
+                Investing in readiness assessment saves organizations an average of 30% in audit-related costs.
+              </p>
+              
+              <h3 className="text-xl font-semibold mb-4">Stakeholder Confidence</h3>
+              <p className="text-muted-foreground">
+                Demonstrating audit readiness builds confidence with customers, suppliers, and regulatory bodies, enhancing your organization's 
+                reputation and competitive advantage in the marketplace.
+              </p>
             </div>
           </div>
         </div>
