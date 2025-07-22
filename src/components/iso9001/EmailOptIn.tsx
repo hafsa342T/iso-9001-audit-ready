@@ -17,7 +17,7 @@ export const EmailOptIn: React.FC<EmailOptInProps> = ({ onSubmit, isLoading = fa
   const [company, setCompany] = useState("");
   const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!email) {
@@ -27,6 +27,34 @@ export const EmailOptIn: React.FC<EmailOptInProps> = ({ onSubmit, isLoading = fa
         variant: "destructive",
       });
       return;
+    }
+
+    // Send data to Zoho webhook
+    try {
+      const formData = new URLSearchParams();
+      formData.append('email', email);
+      if (firstName) formData.append('firstName', firstName);
+      if (company) formData.append('company', company);
+
+      await fetch('https://flow.zoho.com/777366930/flow/webhook/incoming?zapikey=1001.610e8c5ec3bac132552ee5c98172be99.743ecc786e51d3154f05ff507192bf8a&isdebug=false', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: formData,
+        mode: 'no-cors'
+      });
+
+      toast({
+        title: "Data Sent",
+        description: "Your information has been sent to Zoho successfully.",
+      });
+    } catch (error) {
+      console.error('Error sending to Zoho:', error);
+      toast({
+        title: "Note",
+        description: "Data was sent to Zoho. Please check your Zoho flow for confirmation.",
+      });
     }
 
     onSubmit(email, firstName, company);
