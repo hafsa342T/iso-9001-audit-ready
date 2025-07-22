@@ -481,8 +481,8 @@ export const ISO9001Assessment = () => {
       }
 
       // For HTML response (Option 1)
-      if (response.data) {
-        const blob = new Blob([response.data], { type: 'text/html' });
+      if (response.data?.reportHtml) {
+        const blob = new Blob([response.data.reportHtml], { type: 'text/html' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
