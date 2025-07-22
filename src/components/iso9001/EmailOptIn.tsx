@@ -44,11 +44,6 @@ export const EmailOptIn: React.FC<EmailOptInProps> = ({ onSubmit, isLoading = fa
         body: formData,
         mode: 'no-cors'
       });
-
-      toast({
-        title: "Data Sent",
-        description: "Your information has been sent to Zoho successfully.",
-      });
     } catch (error) {
       console.error('Error sending to Zoho:', error);
       toast({
