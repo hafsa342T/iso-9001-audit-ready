@@ -5,3 +5,6 @@ verify_jwt = false
 
 [functions.send-pdf-email]
 verify_jwt = false
+
+[functions.send-zoho-webhook]
+verify_jwt = false

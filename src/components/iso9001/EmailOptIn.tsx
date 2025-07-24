@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Mail, FileText, CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface EmailOptInProps {
   onSubmit: (email: string, firstName?: string, company?: string) => void;
@@ -20,6 +21,9 @@ export const EmailOptIn: React.FC<EmailOptInProps> = ({ onSubmit, isLoading = fa
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Enhanced input validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
     if (!email) {
       toast({
         title: "Email Required",
@@ -28,28 +32,72 @@ export const EmailOptIn: React.FC<EmailOptInProps> = ({ onSubmit, isLoading = fa
       });
       return;
     }
-
-    // Send data to Zoho webhook
-    try {
-      const formData = new URLSearchParams();
-      formData.append('email', email);
-      if (firstName) formData.append('firstName', firstName);
-      if (company) formData.append('company', company);
-
-      await fetch('https://flow.zoho.com/777366930/flow/webhook/incoming?zapikey=1001.610e8c5ec3bac132552ee5c98172be99.743ecc786e51d3154f05ff507192bf8a&isdebug=false', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: formData,
-        mode: 'no-cors'
+    
+    if (!emailRegex.test(email)) {
+      toast({
+        title: "Invalid Email",
+        description: "Please enter a valid email address.",
+        variant: "destructive",
       });
+      return;
+    }
+    
+    if (email.length > 254) {
+      toast({
+        title: "Email Too Long",
+        description: "Please enter a shorter email address.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (firstName && firstName.length > 50) {
+      toast({
+        title: "Name Too Long",
+        description: "Please enter a shorter first name.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (company && company.length > 100) {
+      toast({
+        title: "Company Name Too Long",
+        description: "Please enter a shorter company name.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Send data to secure Zoho webhook endpoint
+    try {
+      const { data, error } = await supabase.functions.invoke('send-zoho-webhook', {
+        body: {
+          email: email.trim(),
+          firstName: firstName.trim() || undefined,
+          company: company.trim() || undefined,
+        }
+      });
+
+      if (error) {
+        console.error('Error sending to Zoho:', error);
+        toast({
+          title: "Error",
+          description: "Failed to send data. Please try again.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      console.log('Data sent to Zoho successfully:', data);
     } catch (error) {
       console.error('Error sending to Zoho:', error);
       toast({
-        title: "Note",
-        description: "Data was sent to Zoho. Please check your Zoho flow for confirmation.",
+        title: "Error",
+        description: "Failed to send data. Please try again.",
+        variant: "destructive",
       });
+      return;
     }
 
     onSubmit(email, firstName, company);
